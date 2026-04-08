@@ -1,0 +1,34 @@
+<h1>List Mata Kuliah</h1>
+
+<a href="/mata-kuliah/create" class="btn btn-success mb-3">Tambah Mata Kuliah</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Kode Mata Kuliah</th>
+            <th>Nama Mata Kuliah</th>
+            <th>SKS</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each mataKuliah}}
+        <tr>
+            <td>{{inc @index}}</td>
+            <td>{{kode}}</td>
+            <td>{{nama}}</td>
+            <td>{{sks}}</td>
+            <td>
+                <a href="/mata-kuliah/edit/{{id}}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+            <td>
+                <form action="/mata-kuliah/delete/{{id}}" method="POST" 
+                    onsubmit="return confirm('Are you sure?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,195 @@
+{
+  "version": "1.0.0",
+  "darkMode": false,
+  "gridEnabling": false,
+  "detailLevel": "All",
+  "tablePositions": [
+    {
+      "name": "pengguna",
+      "schemaName": "public",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "name": "mahasiswa",
+      "schemaName": "public",
+      "x": 288,
+      "y": 0
+    },
+    {
+      "name": "dosen",
+      "schemaName": "public",
+      "x": 544,
+      "y": 0
+    },
+    {
+      "name": "mata_kuliah",
+      "schemaName": "public",
+      "x": 800,
+      "y": 0
+    },
+    {
+      "name": "kelas",
+      "schemaName": "public",
+      "x": 0,
+      "y": 304
+    },
+    {
+      "name": "peserta_kelas",
+      "schemaName": "public",
+      "x": 288,
+      "y": 240
+    },
+    {
+      "name": "sesi_absensi",
+      "schemaName": "public",
+      "x": 544,
+      "y": 208
+    },
+    {
+      "name": "absensi",
+      "schemaName": "public",
+      "x": 800,
+      "y": 208
+    }
+  ],
+  "tableGroupCollapseStates": [],
+  "stickyNoteLayouts": [],
+  "referencePaths": [
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "pengguna",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "pengguna_id"
+      ],
+      "secondTableName": "mahasiswa",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "pengguna",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "pengguna_id"
+      ],
+      "secondTableName": "dosen",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "mata_kuliah",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "mata_kuliah_id"
+      ],
+      "secondTableName": "kelas",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "dosen",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "dosen_id"
+      ],
+      "secondTableName": "kelas",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "mahasiswa",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "mahasiswa_id"
+      ],
+      "secondTableName": "peserta_kelas",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "kelas",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "kelas_id"
+      ],
+      "secondTableName": "peserta_kelas",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "kelas",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "kelas_id"
+      ],
+      "secondTableName": "sesi_absensi",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "sesi_absensi",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "sesi_id"
+      ],
+      "secondTableName": "absensi",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "mahasiswa",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "mahasiswa_id"
+      ],
+      "secondTableName": "absensi",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    }
+  ]
+}

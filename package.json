@@ -1,0 +1,22 @@
+{
+  "name": "web-absensi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "db:init": "node database/init.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "better-sqlite3": "^12.8.0",
+    "bootstrap": "^5.3.8",
+    "express": "^5.2.1",
+    "express-handlebars": "^8.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

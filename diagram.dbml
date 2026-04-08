@@ -1,0 +1,68 @@
+Project sistem_absensi_mahasiswa {
+  database_type: "PostgreSQL"
+}
+
+Table pengguna {
+  id integer [pk, increment]
+  nama varchar
+  email varchar [unique]
+  password varchar
+  peran varchar // admin | dosen | mahasiswa
+  dibuat_pada timestamp
+  diperbarui_pada timestamp
+}
+
+Table mahasiswa {
+  id integer [pk, increment]
+  pengguna_id integer [ref: > pengguna.id]
+  nim varchar [unique]
+  program_studi varchar
+  angkatan integer
+}
+
+Table dosen {
+  id integer [pk, increment]
+  pengguna_id integer [ref: > pengguna.id]
+  nidn varchar [unique]
+  departemen varchar
+}
+
+Table mata_kuliah {
+  id integer [pk, increment]
+  kode varchar [unique]
+  nama varchar
+  sks integer
+}
+
+Table kelas {
+  id integer [pk, increment]
+  mata_kuliah_id integer [ref: > mata_kuliah.id]
+  dosen_id integer [ref: > dosen.id]
+  nama_kelas varchar
+  semester varchar
+  tahun_akademik varchar
+}
+
+Table peserta_kelas {
+  id integer [pk, increment]
+  mahasiswa_id integer [ref: > mahasiswa.id]
+  kelas_id integer [ref: > kelas.id]
+}
+
+Table sesi_absensi {
+  id integer [pk, increment]
+  kelas_id integer [ref: > kelas.id]
+  pertemuan_ke integer
+  topik varchar
+  tanggal date
+  jam_mulai time
+  jam_selesai time
+}
+
+Table absensi {
+  id integer [pk, increment]
+  sesi_id integer [ref: > sesi_absensi.id]
+  mahasiswa_id integer [ref: > mahasiswa.id]
+  status varchar // hadir | izin | sakit | alpha
+  waktu_absen timestamp
+}
