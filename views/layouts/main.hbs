@@ -14,16 +14,29 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" aria-current="page" href="/">Home</a>
-                <a class="nav-link" href="/mata-kuliah/list">Mata Kuliah</a>
-                <a class="nav-link" href="/mahasiswa/list">Mahasiswa</a>
-            </div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/mata-kuliah/list">Mata Kuliah</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pengguna
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/dosen/list">Dosen</a></li>
+                            <li><a class="dropdown-item" href="/mahasiswa/list">Mahasiswa</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/admin/list">Admin</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container py-4">
         {{{ body }}}
     </div>
 

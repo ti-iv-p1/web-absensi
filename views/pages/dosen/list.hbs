@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-between mb-3">
+    <h1>List Dosen</h1>
+    
+    <a href="/dosen/create" class="btn btn-success mb-3">Tambah Dosen</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>NIDN</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Departemen</th>
+            <th colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#unless dosen.length }}
+        <tr>
+            <td colspan="6" class="text-center">
+                Tidak ada dosen yang ditemukan <br>
+                <a href="/dosen/create" class="link">Tambah Dosen</a>
+            </td>
+        </tr>
+        {{/unless}}
+
+        <!-- Dosen data will be populated here -->
+        {{#each dosen}}
+        <tr>
+            <td>{{this.nidn}}</td>
+            <td>{{this.nama}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.departemen}}</td>
+            <td>
+                <a href="/dosen/edit/{{this.id}}" class="btn btn-warning w-100">Edit</a>
+            </td>
+            <td>
+                <form action="/dosen/delete/{{this.id}}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this dosen?');">
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6" class="text-center">Total Dosen: {{dosen.length}}</td>
+        </tr>
+    </tfoot>
+</table>

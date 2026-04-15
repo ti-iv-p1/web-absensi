@@ -1,0 +1,21 @@
+<h1>Edit Dosen</h1>
+
+<form action="/dosen/edit/{{dosen.id}}" method="POST">
+    <div class="mb-3">
+        <label for="nidn" class="form-label">NIDN</label>
+        <input type="text" class="form-control" id="nidn" name="nidn" value="{{dosen.nidn}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="nama" class="form-label">Nama</label>
+        <input type="text" class="form-control" id="nama" name="nama" value="{{dosen.nama}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{dosen.email}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="departemen" class="form-label">Departemen</label>
+        <input type="text" class="form-control" id="departemen" name="departemen" value="{{dosen.departemen}}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

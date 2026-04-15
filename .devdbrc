@@ -2,5 +2,9 @@
   {
     "type": "sqlite",
     "path": "/Users/gymie/testing/ibbi/web-absensi/absensi.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "d:\\testing\\ibbi\\ti-iv-p1\\web-absensi\\absensi.db"
   }
 ]

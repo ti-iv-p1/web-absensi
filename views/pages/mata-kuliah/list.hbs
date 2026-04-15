@@ -1,34 +1,48 @@
-<h1>List Mata Kuliah</h1>
-
-<a href="/mata-kuliah/create" class="btn btn-success mb-3">Tambah Mata Kuliah</a>
+<div class="d-flex justify-content-between mb-3">
+    <h1>List Mata Kuliah</h1>
+    
+    <a href="/mata-kuliah/create" class="btn btn-success mb-3">Tambah Mata Kuliah</a>
+</div>
 
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>No</th>
             <th>Kode Mata Kuliah</th>
             <th>Nama Mata Kuliah</th>
             <th>SKS</th>
-            <th colspan="2">Action</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
+        {{#unless mataKuliah.length}}
+        <tr>
+            <td colspan="6" class="text-center">
+                Tidak ada mata kuliah yang ditemukan <br>
+                <a href="/mata-kuliah/create" class="link">Tambah Mata Kuliah</a>
+            </td>
+        </tr>
+        {{/unless }}
+
         {{#each mataKuliah}}
         <tr>
-            <td>{{inc @index}}</td>
             <td>{{kode}}</td>
             <td>{{nama}}</td>
             <td>{{sks}}</td>
             <td>
-                <a href="/mata-kuliah/edit/{{id}}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="/mata-kuliah/edit/{{id}}" class="btn btn-warning w-100">Edit</a>
             </td>
             <td>
-                <form action="/mata-kuliah/delete/{{id}}" method="POST" 
-                    onsubmit="return confirm('Are you sure?');">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                <form action="/mata-kuliah/delete/{{id}}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this mata kuliah?');">
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
                 </form>
             </td>
         </tr>
         {{/each}}
     </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="6" class="text-center">Total Mata Kuliah: {{mataKuliah.length}}</td>
+        </tr>
+    </tfoot>
 </table>

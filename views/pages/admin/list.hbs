@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between mb-3">
+    <h1>List Admin</h1>
+    
+    <a href="/admin/create" class="btn btn-success mb-3">Tambah Admin</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{!-- Jika tidak ada admin --}}
+        {{#unless admin.length }}
+        <tr>
+            <td colspan="4" class="text-center">
+                Tidak ada admin yang ditemukan <br>
+                <a href="/admin/create" class="link">Tambah Admin</a>
+            </td>
+        </tr>
+        {{/unless}}
+
+        {{#each admin}}
+        <tr>
+            <td>{{this.nama}}</td>
+            <td>{{this.email}}</td>
+            <td>
+                <a href="/admin/edit/{{this.id}}" class="btn btn-warning w-100">Edit</a>
+            </td>
+            <td>
+                <form action="/admin/delete/{{this.id}}" method="POST"
+                    onsubmit="return confirm('Are you sure you want to delete this admin?');">
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4" class="text-center">Total Admin: {{admin.length}}</td>
+        </tr>
+    </tfoot>
+</table>
