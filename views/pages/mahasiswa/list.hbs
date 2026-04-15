@@ -1,0 +1,35 @@
+<h1>List Mahasiswa</h1>
+
+<a href="/mahasiswa/create" class="btn btn-success mb-3">Tambah Mahasiswa</a>
+
+<table class="table table-bordered">
+    <thead>
+        <th>NIM</th>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>Program Studi</th>
+        <th>Angkatan</th>
+        <th colspan="2">Actions</th>
+    </thead>
+    <tbody>
+        {{#each mahasiswa}}
+        <tr>
+            <td>{{nim}}</td>
+            <td>{{nama}}</td>
+            <td>{{email}}</td>
+            <td>{{program_studi}}</td>
+            <td>{{angkatan}}</td>
+            <td>
+                <a href="/mahasiswa/edit/{{id}}" 
+                    class="btn btn-warning">Edit</a>
+            </td>
+            <td>
+                <form action="/mahasiswa/delete/{{id}}" method="POST" 
+                    onsubmit="return confirm('Are you sure?');">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

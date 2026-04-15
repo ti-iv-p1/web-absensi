@@ -13,7 +13,7 @@
     {
       "name": "mahasiswa",
       "schemaName": "public",
-      "x": 288,
+      "x": 286.095703125,
       "y": 0
     },
     {
@@ -25,8 +25,8 @@
     {
       "name": "mata_kuliah",
       "schemaName": "public",
-      "x": 800,
-      "y": 0
+      "x": 397.2649626839872,
+      "y": 418.4215097632417
     },
     {
       "name": "kelas",
