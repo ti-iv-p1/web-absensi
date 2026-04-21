@@ -18,8 +18,12 @@
     </div>
     <div class="mb-3">
         <label for="program_studi" class="form-label">Program Studi</label>
-        <input type="text" class="form-control" id="program_studi" name="program_studi" 
-            value="{{mahasiswa.program_studi}}" required>
+        <select class="form-control" id="program_studi" name="program_studi" required>
+            <option value="">Pilih Program Studi</option>
+            <option value="ti" {{#if (eq mahasiswa.program_studi "ti")}}selected{{/if}}>Teknik Informatika (TI)</option>
+            <option value="it" {{#if (eq mahasiswa.program_studi "it")}}selected{{/if}}>Teknologi Informasi (IT)</option>
+            <option value="si" {{#if (eq mahasiswa.program_studi "si")}}selected{{/if}}>Sistem Informasi (SI)</option>
+        </select>
     </div>
     <div class="mb-3">
         <label for="angkatan" class="form-label">Angkatan</label>

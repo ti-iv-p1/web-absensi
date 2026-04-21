@@ -30,7 +30,7 @@
             <td>{{this.nidn}}</td>
             <td>{{this.nama}}</td>
             <td>{{this.email}}</td>
-            <td>{{this.departemen}}</td>
+            <td>{{#if (eq this.departemen "fish")}}Fakultas Ilmu Sosial dan Humaniora (FISH){{else if (eq this.departemen "fast")}}Fakultas Sains dan Teknologi (FaST){{/if }}</td>
             <td>
                 <a href="/dosen/edit/{{this.id}}" class="btn btn-warning w-100">Edit</a>
             </td>

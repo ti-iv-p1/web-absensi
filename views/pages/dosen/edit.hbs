@@ -15,7 +15,11 @@
     </div>
     <div class="mb-3">
         <label for="departemen" class="form-label">Departemen</label>
-        <input type="text" class="form-control" id="departemen" name="departemen" value="{{dosen.departemen}}" required>
+        <select class="form-control" id="departemen" name="departemen" required>
+            <option value="">Pilih Departemen</option>
+            <option value="fish" {{#if (eq dosen.departemen "fish")}}selected{{/if}}>Fakultas Ilmu Sosial dan Humaniora (FISH)</option>
+            <option value="fast" {{#if (eq dosen.departemen "fast")}}selected{{/if}}>Fakultas Sains dan Teknologi (FaST)</option>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
 </form>

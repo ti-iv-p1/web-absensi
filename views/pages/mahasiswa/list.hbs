@@ -28,7 +28,7 @@
             <td>{{nim}}</td>
             <td>{{nama}}</td>
             <td>{{email}}</td>
-            <td>{{program_studi}}</td>
+            <td>{{#if (eq program_studi "ti")}}Teknik Informatika (TI){{else if (eq program_studi "it")}}Teknologi Informasi (IT){{else if (eq program_studi "si")}}Sistem Informasi (SI){{/if}}</td>
             <td>{{angkatan}}</td>
             <td>
                 <a href="/mahasiswa/edit/{{id}}" class="btn btn-warning w-100">Edit</a>
