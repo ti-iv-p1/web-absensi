@@ -1,6 +1,4 @@
-const Database = require("better-sqlite3");
-
-const db = new Database("absensi.db", { verbose: console.log });
+const db = require('./config');
 
 db.pragma("foreign_keys = ON");
 
