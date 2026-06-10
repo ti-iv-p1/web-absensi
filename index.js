@@ -1,16 +1,31 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const path = require('path');
+const session = require('express-session');
 
 const matakuliahRoutes = require('./routes/matakuliahRoutes');
 const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
 const dosenRoutes = require('./routes/dosenRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const kelasRoutes = require('./routes/kelasRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+const { isAuthenticated } = require('./middlewares/authMiddleware');
 
 // Inisialisasi express app
 const app = express();
 app.use(express.urlencoded({ extended: true })); // Middleware untuk parsing form data
+
+// Konfigurasi session
+app.use(session({
+  secret: 'aku-cinta-ibbi',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 60 * 60 * 1000 * 1
+  }
+}));
 
 // Konfigurasi Handlebars sebagai view engine
 app.engine('hbs', engine({
@@ -65,22 +80,30 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+
+
+// Middleware untuk membuat session tersedia di semua view
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
+
 // load bootstrap dari node_modules
 app.use('/bootstrap', 
   express.static(path.join(__dirname, 'node_modules/bootstrap/dist'))
 );
 
-
 // Buat route ke root /
-app.get('/', (req, res) => {
+app.get('/', isAuthenticated, (req, res) => {
   res.render('pages/index');
 });
 
-app.use("/mata-kuliah",matakuliahRoutes);
-app.use("/mahasiswa",mahasiswaRoutes);
-app.use("/dosen",dosenRoutes);
-app.use("/admin",adminRoutes);
-app.use("/kelas",kelasRoutes);
+app.use("/mata-kuliah", isAuthenticated, matakuliahRoutes);
+app.use("/mahasiswa", isAuthenticated, mahasiswaRoutes);
+app.use("/dosen", isAuthenticated, dosenRoutes);
+app.use("/admin", isAuthenticated, adminRoutes);
+app.use("/kelas", isAuthenticated, kelasRoutes);
+app.use("/auth", authRoutes);
 
 // jalankan server di port 3000
 app.listen(3000, () => {
