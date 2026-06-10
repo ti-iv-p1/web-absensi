@@ -1,10 +1,11 @@
 const router = require('express').Router();
 
 const AuthController = require('../controllers/AuthController');
+const { isNotAuthenticated } = require('../middlewares/authMiddleware');
 
-router.get('/login', AuthController.showLoginForm);
+router.get('/login',isNotAuthenticated, AuthController.showLoginForm);
 
-router.post('/login', AuthController.handleLogin);
+router.post('/login', isNotAuthenticated, AuthController.handleLogin);
 
 router.get('/logout', AuthController.handleLogout);
 

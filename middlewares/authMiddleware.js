@@ -1,4 +1,5 @@
 function isAuthenticated(req, res, next) {
+    // Check if the user is authenticated by verifying the session
     if (req.session && req.session.email) {
         return next();
     } else {
@@ -6,6 +7,16 @@ function isAuthenticated(req, res, next) {
     }
 }
 
+function isNotAuthenticated(req, res, next) {
+    // Check if the user is not authenticated by verifying the session
+    if (req.session && req.session.email) {
+        res.redirect('/');
+    } else {
+        return next();
+    }
+}
+
 module.exports = {
-    isAuthenticated
+    isAuthenticated,
+    isNotAuthenticated
 }
