@@ -530,6 +530,8 @@ Database menggunakan **SQLite** dengan struktur sebagai berikut:
 
 Lihat [diagram.dbml](diagram.dbml) untuk schema lengkap dan relasi antar tabel.
 
+![Diagram Database](diagram.png)
+
 ## 📖 Penggunaan
 
 ### Menjalankan Aplikasi
