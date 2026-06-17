@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "darkMode": false,
+  "darkMode": true,
   "gridEnabling": false,
   "currentViewName": null,
   "defaultView": {
@@ -9,50 +9,50 @@
       {
         "name": "pengguna",
         "schemaName": "public",
-        "x": 760,
-        "y": 240
+        "x": 672,
+        "y": 296
       },
       {
         "name": "mahasiswa",
         "schemaName": "public",
-        "x": 208,
-        "y": 232
+        "x": 216,
+        "y": 224
       },
       {
         "name": "dosen",
         "schemaName": "public",
-        "x": 560,
-        "y": 776
+        "x": 632,
+        "y": 760
       },
       {
         "name": "mata_kuliah",
         "schemaName": "public",
-        "x": 504,
-        "y": 256
+        "x": 496,
+        "y": 144
       },
       {
         "name": "kelas",
         "schemaName": "public",
-        "x": 816,
-        "y": 600
+        "x": 880,
+        "y": 592
       },
       {
         "name": "peserta_kelas",
         "schemaName": "public",
-        "x": 592,
+        "x": 688,
         "y": 48
       },
       {
         "name": "sesi_absensi",
         "schemaName": "public",
-        "x": 376,
+        "x": 392,
         "y": 480
       },
       {
         "name": "absensi",
         "schemaName": "public",
         "x": 48,
-        "y": 584
+        "y": 560
       }
     ],
     "tableGroupCollapseStates": [],
