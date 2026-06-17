@@ -1,5 +1,7 @@
 const DosenModel = require('../models/Dosen');
 
+const { transporter } = require('../config/mail');
+
 function validateDosen(nidn, nama, email, departemen) {
   const pesanError = [];
 
@@ -81,7 +83,34 @@ function createDosen(req, res) {
 
   DosenModel.buatDosen(nidn, nama, email, departemen);
 
+  kirimEmailDataUser(nama, email, nidn);
+
   res.redirect('/dosen/list');
+}
+
+async function kirimEmailDataUser(nama, email, password) {
+  // Kirim email data user
+  await transporter.sendMail({
+    from: {
+      name: 'Admin Absensi',
+      address: 'admin@ibbi.ac.id'
+    },
+    to: email,
+    subject: 'Data User Baru',
+    html: `
+      <p>Halo ${nama},</p>
+      <p>Berikut adalah data user Anda:</p>
+      <ul>
+        <li><strong>Nama:</strong> ${nama}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Password:</strong> ${password}</li>
+      </ul>
+      <p>Silakan login menggunakan email dan password di atas.</p>
+      <a href="http://localhost:3000/auth/login" 
+      style="background-color: #007bff; color: white; padding: 10px 20px; 
+        text-decoration: none; border-radius: 5px;">Login</a>
+    `
+  });
 }
 
 function editDosen(req, res) {

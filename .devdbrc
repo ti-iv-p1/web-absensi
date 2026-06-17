@@ -14,5 +14,9 @@
   {
     "type": "sqlite",
     "path": "/Users/gymie/testing/ibbi/ti-iv-p1/uts/web-absensi/absensi-ibbi.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "/Users/gymie/testing/ibbi/ti-iv-p1/web-absensi/absensi-ibbi.db"
   }
 ]

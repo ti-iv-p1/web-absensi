@@ -1,7 +1,12 @@
+require('dotenv').config();
+
 const express = require('express');
 const { engine } = require('express-handlebars');
 const path = require('path');
 const session = require('express-session');
+
+const { transporter } = require('./config/mail');
+
 
 const matakuliahRoutes = require('./routes/matakuliahRoutes');
 const mahasiswaRoutes = require('./routes/mahasiswaRoutes');
@@ -107,5 +112,6 @@ app.use("/auth", authRoutes);
 
 // jalankan server di port 3000
 app.listen(3000, () => {
+  transporter.verify();
   console.log('Server is running on http://localhost:3000');
 });

@@ -9,6 +9,7 @@ db.exec(`
     email TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
     peran TEXT NOT NULL CHECK(peran IN ('admin', 'dosen', 'mahasiswa')),
+    reset_token TEXT,
     dibuat_pada DATETIME DEFAULT CURRENT_TIMESTAMP,
     diperbarui_pada DATETIME DEFAULT CURRENT_TIMESTAMP
   );
