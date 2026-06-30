@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Tambah Sesi Absensi</h1>
+    <a href="/absensi/list" class="btn btn-secondary">Kembali</a>
+</div>
+
+{{#if pesanError.length}}
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            {{#each pesanError}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+
+<form action="/absensi/create" method="POST">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group mb-3">
+                <label for="kelas_id" class="form-label fw-bold">Kelas <span class="text-danger">*</span></label>
+                <select class="form-select" id="kelas_id" name="kelas_id" required>
+                    <option value="">-- Pilih Kelas --</option>
+                    {{#each kelas}}
+                        <option value="{{this.id}}" {{#if (eq this.id ../formData.kelas_id)}}selected{{/if}}>
+                            {{this.nama_kelas}} - {{this.nama_mata_kuliah}} ({{this.tahun_akademik}} - Semester {{this.semester}})
+                        </option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="pertemuan_ke" class="form-label fw-bold">Pertemuan Ke- <span class="text-danger">*</span></label>
+                <select class="form-select" id="pertemuan_ke" name="pertemuan_ke" required>
+                    <option value="">-- Pilih Pertemuan --</option>
+                    {{#each (array 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16)}}
+                        <option value="{{this}}" {{#if (eq this ../formData.pertemuan_ke)}}selected{{/if}}>{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group mb-3">
+                <label for="topik" class="form-label fw-bold">Topik Pembahasan <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="topik" name="topik" placeholder="Masukkan topik pembahasan" value="{{formData.topik}}" required>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label for="tanggal" class="form-label fw-bold">Tanggal <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{formData.tanggal}}" required>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label for="jam_mulai" class="form-label fw-bold">Jam Mulai <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="{{formData.jam_mulai}}" required>
+                </div>
+                <div class="form-group col-md-4 mb-3">
+                    <label for="jam_selesai" class="form-label fw-bold">Jam Selesai <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="{{formData.jam_selesai}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="/absensi/list" class="btn btn-secondary">Batal</a>
+        </div>
+    </div>
+</form>
