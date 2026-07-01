@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Sesi Absensi</h1>
+    <div>
+        <a href="/absensi/rekap" class="btn btn-info me-2">Rekap Absensi</a>
+        <a href="/absensi/create" class="btn btn-success">Tambah Sesi</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>No</th>
+            <th>Kelas</th>
+            <th>Mata Kuliah</th>
+            <th>Dosen</th>
+            <th>Pertemuan Ke-</th>
+            <th>Topik</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
+            <th colspan="3">Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#unless sesiAbsensi.length}}
+        <tr>
+            <td colspan="10" class="text-center">
+                Tidak ada sesi absensi yang ditemukan <br>
+                <a href="/absensi/create" class="link">Tambah Sesi Absensi</a>
+            </td>
+        </tr>
+        {{/unless}}
+
+        {{#each sesiAbsensi}}
+        <tr>
+            <td>{{inc @index}}</td>
+            <td>{{this.nama_kelas}}</td>
+            <td>{{this.nama_mata_kuliah}}</td>
+            <td>{{this.nama_dosen}}</td>
+            <td class="text-center">{{this.pertemuan_ke}}</td>
+            <td>{{this.topik}}</td>
+            <td>{{this.tanggal}}</td>
+            <td>{{this.jam_mulai}} - {{this.jam_selesai}}</td>
+            <td>
+                <a href="/absensi/absen/{{this.id}}" class="btn btn-primary btn-sm">Absen</a>
+            </td>
+            <td>
+                <a href="/absensi/edit/{{this.id}}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+            <td>
+                <form action="/absensi/delete/{{this.id}}" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus sesi ini? Semua data absensi terkait juga akan terhapus.')">Hapus</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

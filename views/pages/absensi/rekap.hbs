@@ -1,0 +1,98 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Rekap Absensi</h1>
+    <a href="/absensi/list" class="btn btn-secondary">Kembali</a>
+</div>
+
+<!-- Filter Kelas -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form action="/absensi/rekap" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-8">
+                <label for="kelas_id" class="form-label fw-bold">Pilih Kelas</label>
+                <select class="form-select" id="kelas_id" name="kelas_id" required>
+                    <option value="">-- Pilih Kelas --</option>
+                    {{#each kelas}}
+                        <option value="{{this.id}}" {{#if (eq this.id ../kelasTerpilih.id)}}selected{{/if}}>
+                            {{this.nama_kelas}} - {{this.nama_mata_kuliah}} ({{this.tahun_akademik}} - Semester {{this.semester}})
+                        </option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Lihat Rekap</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{#if kelasTerpilih}}
+<!-- Info Kelas -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Rekap: {{kelasTerpilih.nama_kelas}} - {{kelasTerpilih.nama_mata_kuliah}}</h5>
+    </div>
+    <div class="card-body">
+        <p class="mb-0">
+            <strong>Tahun Akademik:</strong> {{kelasTerpilih.tahun_akademik}} &nbsp;|&nbsp;
+            <strong>Semester:</strong> {{kelasTerpilih.semester}} &nbsp;|&nbsp;
+            <strong>Dosen:</strong> {{kelasTerpilih.nama_dosen}} &nbsp;|&nbsp;
+            <strong>Jumlah Peserta:</strong> {{kelasTerpilih.jumlah_peserta}} mahasiswa
+        </p>
+    </div>
+</div>
+
+{{#unless rekap.length}}
+<div class="alert alert-warning">
+    Tidak ada data absensi untuk kelas ini.
+</div>
+{{/unless}}
+
+{{#if rekap.length}}
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th class="text-center">No</th>
+                <th>NIM</th>
+                <th>Nama Mahasiswa</th>
+                <th class="text-center text-success">Hadir</th>
+                <th class="text-center text-warning">Izin</th>
+                <th class="text-center text-info">Sakit</th>
+                <th class="text-center text-danger">Alpha</th>
+                <th class="text-center">Total Sesi</th>
+                <th class="text-center">Persentase</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each rekap}}
+            <tr>
+                <td class="text-center">{{inc @index}}</td>
+                <td>{{this.nim}}</td>
+                <td>{{this.nama}}</td>
+                <td class="text-center">
+                    <span class="badge bg-success">{{this.total_hadir}}</span>
+                </td>
+                <td class="text-center">
+                    <span class="badge bg-warning text-dark">{{this.total_izin}}</span>
+                </td>
+                <td class="text-center">
+                    <span class="badge bg-info text-dark">{{this.total_sakit}}</span>
+                </td>
+                <td class="text-center">
+                    <span class="badge bg-danger">{{this.total_alpha}}</span>
+                </td>
+                <td class="text-center">{{this.total_sesi}}</td>
+                <td class="text-center">
+                    {{#if (gt this.total_sesi 0)}}
+                        {{persentase this.total_hadir this.total_sesi}}%
+                    {{else}}
+                        -
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{/if}}
+{{/if}}

@@ -1,0 +1,142 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Absensi Mahasiswa</h1>
+    <a href="/absensi/list" class="btn btn-secondary">Kembali</a>
+</div>
+
+{{#if pesanError.length}}
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            {{#each pesanError}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+{{/if}}
+
+<!-- Info Sesi -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Informasi Sesi</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <strong>Kelas:</strong> {{sesi.nama_kelas}}
+            </div>
+            <div class="col-md-3">
+                <strong>Mata Kuliah:</strong> {{sesi.nama_mata_kuliah}}
+            </div>
+            <div class="col-md-2">
+                <strong>Pertemuan Ke-:</strong> {{sesi.pertemuan_ke}}
+            </div>
+            <div class="col-md-2">
+                <strong>Tanggal:</strong> {{sesi.tanggal}}
+            </div>
+            <div class="col-md-2">
+                <strong>Jam:</strong> {{sesi.jam_mulai}} - {{sesi.jam_selesai}}
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <strong>Topik:</strong> {{sesi.topik}}
+            </div>
+            <div class="col-md-6">
+                <strong>Dosen:</strong> {{sesi.nama_dosen}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{#unless peserta.length}}
+<div class="alert alert-warning">
+    <strong>Perhatian!</strong> Tidak ada mahasiswa terdaftar di kelas ini. 
+    Silakan <a href="/kelas/edit/{{sesi.kelas_id}}">tambahkan peserta kelas</a> terlebih dahulu.
+</div>
+{{/unless}}
+
+{{#if peserta.length}}
+<!-- Form Absensi -->
+<form action="/absensi/absen/{{sesi.id}}" method="POST">
+    <div class="card">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Daftar Mahasiswa</h5>
+            <div>
+                <button type="button" class="btn btn-sm btn-light" onclick="setSemuaStatus('hadir')">Semua Hadir</button>
+                <button type="button" class="btn btn-sm btn-warning" onclick="setSemuaStatus('alpha')">Semua Alpha</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center" style="width: 50px;">No</th>
+                        <th>NIM</th>
+                        <th>Nama Mahasiswa</th>
+                        <th class="text-center" style="width: 100px;">Hadir</th>
+                        <th class="text-center" style="width: 100px;">Izin</th>
+                        <th class="text-center" style="width: 100px;">Sakit</th>
+                        <th class="text-center" style="width: 100px;">Alpha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each peserta}}
+                    <tr>
+                        <td class="text-center">{{inc @index}}</td>
+                        <td>{{this.nim}}</td>
+                        <td>{{this.nama}}</td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{this.mahasiswa_id}}" value="hadir" 
+                                class="btn-check" id="hadir-{{this.mahasiswa_id}}"
+                                {{#if this.status_hadir}}checked{{/if}}>
+                            <label class="btn btn-outline-success btn-sm mb-0" for="hadir-{{this.mahasiswa_id}}">H</label>
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{this.mahasiswa_id}}" value="izin" 
+                                class="btn-check" id="izin-{{this.mahasiswa_id}}"
+                                {{#if this.status_izin}}checked{{/if}}>
+                            <label class="btn btn-outline-warning btn-sm mb-0" for="izin-{{this.mahasiswa_id}}">I</label>
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{this.mahasiswa_id}}" value="sakit" 
+                                class="btn-check" id="sakit-{{this.mahasiswa_id}}"
+                                {{#if this.status_sakit}}checked{{/if}}>
+                            <label class="btn btn-outline-info btn-sm mb-0" for="sakit-{{this.mahasiswa_id}}">S</label>
+                        </td>
+                        <td class="text-center">
+                            <input type="radio" name="status_{{this.mahasiswa_id}}" value="alpha" 
+                                class="btn-check" id="alpha-{{this.mahasiswa_id}}"
+                                {{#if this.status_alpha}}checked{{/if}}>
+                            <label class="btn btn-outline-danger btn-sm mb-0" for="alpha-{{this.mahasiswa_id}}">A</label>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success">Simpan Absensi</button>
+            <a href="/absensi/list" class="btn btn-secondary">Batal</a>
+        </div>
+    </div>
+</form>
+{{/if}}
+
+<style>
+    .btn-check {
+        position: absolute;
+        clip: rect(0,0,0,0);
+        pointer-events: none;
+    }
+    .btn-check:checked + label {
+        font-weight: bold;
+        box-shadow: 0 0 0 0.2rem rgba(0,0,0,0.25);
+    }
+</style>
+
+<script>
+function setSemuaStatus(status) {
+    document.querySelectorAll('input[type="radio"][value="' + status + '"]').forEach(function(radio) {
+        radio.checked = true;
+    });
+}
+</script>

@@ -14,6 +14,7 @@ const dosenRoutes = require('./routes/dosenRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const kelasRoutes = require('./routes/kelasRoutes');
 const authRoutes = require('./routes/authRoutes');
+const absensiRoutes = require('./routes/absensiRoutes');
 
 const { isAuthenticated } = require('./middlewares/authMiddleware');
 
@@ -23,7 +24,7 @@ app.use(express.urlencoded({ extended: true })); // Middleware untuk parsing for
 
 // Konfigurasi session
 app.use(session({
-  secret: 'aku-cinta-ibbi',
+  secret: process.env.SESSION_SECRET || 'default-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -77,6 +78,32 @@ app.engine('hbs', engine({
         // Inline helper context: {{#if (inArray arr val)}}...{{/if}}
         return isIncluded;
       }
+    },
+    // Math helper: {{math a "op" b}}
+    math: (a, op, b) => {
+      const numA = parseFloat(a) || 0;
+      const numB = parseFloat(b) || 0;
+      switch (op) {
+        case '+': return numA + numB;
+        case '-': return numA - numB;
+        case '*': return numA * numB;
+        case '/': return numB !== 0 ? numA / numB : 0;
+        case '%': return numA % numB;
+        default: return 0;
+      }
+    },
+    // Greater than: {{#gt a b}}...{{/gt}}
+    gt: (a, b) => parseFloat(a) > parseFloat(b),
+    // Array helper for generating number ranges: {{#each (array 1 2 3)}}
+    array: (...args) => args.slice(0, -1), // last arg is Handlebars options object
+    // Lookup helper: {{lookup obj key}}
+    lookup: (obj, key) => obj ? obj[key] : undefined,
+    // Percentage helper: {{persentase nilai total}}
+    persentase: (nilai, total) => {
+      const n = parseFloat(nilai) || 0;
+      const t = parseFloat(total) || 0;
+      if (t === 0) return '0.00';
+      return ((n / t) * 100).toFixed(2);
     }
   }
 }))
@@ -109,6 +136,7 @@ app.use("/dosen", isAuthenticated, dosenRoutes);
 app.use("/admin", isAuthenticated, adminRoutes);
 app.use("/kelas", isAuthenticated, kelasRoutes);
 app.use("/auth", authRoutes);
+app.use("/absensi", isAuthenticated, absensiRoutes);
 
 // jalankan server di port 3000
 app.listen(3000, () => {
