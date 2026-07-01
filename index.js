@@ -16,7 +16,7 @@ const kelasRoutes = require('./routes/kelasRoutes');
 const authRoutes = require('./routes/authRoutes');
 const absensiRoutes = require('./routes/absensiRoutes');
 
-const { isAuthenticated } = require('./middlewares/authMiddleware');
+const { isAuthenticated, authorize } = require('./middlewares/authMiddleware');
 
 // Inisialisasi express app
 const app = express();
@@ -117,6 +117,12 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware untuk membuat session tersedia di semua view
 app.use((req, res, next) => {
   res.locals.session = req.session;
+
+  // Set role flags for easier access in views
+  res.locals.isAdmin = req.session.peran === 'admin';
+  res.locals.isDosen = req.session.peran === 'dosen';
+  res.locals.isMahasiswa = req.session.peran === 'mahasiswa';
+
   next();
 });
 
@@ -131,15 +137,17 @@ app.get('/', isAuthenticated, (req, res) => {
 });
 
 app.use("/mata-kuliah", isAuthenticated, matakuliahRoutes);
-app.use("/mahasiswa", isAuthenticated, mahasiswaRoutes);
-app.use("/dosen", isAuthenticated, dosenRoutes);
-app.use("/admin", isAuthenticated, adminRoutes);
+app.use("/mahasiswa", isAuthenticated, authorize('admin'), mahasiswaRoutes);
+app.use("/dosen", isAuthenticated, authorize('admin'), dosenRoutes);
+app.use("/admin", isAuthenticated, authorize('admin'), adminRoutes);
 app.use("/kelas", isAuthenticated, kelasRoutes);
 app.use("/auth", authRoutes);
-app.use("/absensi", isAuthenticated, absensiRoutes);
+app.use("/absensi", isAuthenticated, authorize('admin', 'dosen'), absensiRoutes);
 
 // jalankan server di port 3000
 app.listen(3000, () => {
-  transporter.verify();
+  transporter.verify().catch(err => {
+    console.warn('Mail transporter not available:', err.message);
+  });
   console.log('Server is running on http://localhost:3000');
 });

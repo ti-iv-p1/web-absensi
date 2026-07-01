@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const KelasController = require('../controllers/KelasController');
 
-router.get('/list', KelasController.listKelas);
-router.get('/create', KelasController.showCreateForm);
-router.post('/create', KelasController.createKelas);
-router.get('/edit/:id', KelasController.showEditForm);
-router.post('/edit/:id', KelasController.editKelas);
-router.post('/delete/:id', KelasController.deleteKelas);
+const { authorize } = require('../middlewares/authMiddleware');
+
+router.get('/list', authorize('admin', 'dosen'), KelasController.listKelas);
+router.get('/create', authorize('admin'), KelasController.showCreateForm);
+router.post('/create', authorize('admin'), KelasController.createKelas);
+router.get('/edit/:id', authorize('admin'), KelasController.showEditForm);
+router.post('/edit/:id', authorize('admin'), KelasController.editKelas);
+router.post('/delete/:id', authorize('admin'), KelasController.deleteKelas);
 
 module.exports = router;

@@ -80,10 +80,19 @@ function validateSesiAbsensi(kelas_id, pertemuan_ke, topik, tanggal, jam_mulai, 
 // ==================== SESI ABSENSI CRUD ====================
 
 function listSesi(req, res) {
-    const sesiAbsensi = AbsensiModel.ambilSemuaSesi();
-    return res.render('pages/absensi/list', {
-        sesiAbsensi: sesiAbsensi
-    });
+    if (req.session.peran === 'dosen') {
+        const dosenId = req.session.user_id;
+        const sesiByDosen = AbsensiModel.ambilSemuaSesiByDosenId(dosenId);
+        return res.render('pages/absensi/list', {
+            sesiAbsensi: sesiByDosen
+        });
+    }else {
+        const sesiAbsensi = AbsensiModel.ambilSemuaSesi();
+
+        return res.render('pages/absensi/list', {
+            sesiAbsensi: sesiAbsensi
+        });
+    }
 }
 
 function showCreateForm(req, res) {

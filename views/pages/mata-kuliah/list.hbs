@@ -1,7 +1,9 @@
 <div class="d-flex justify-content-between mb-3">
     <h1>List Mata Kuliah</h1>
     
+    {{#if isAdmin}}
     <a href="/mata-kuliah/create" class="btn btn-success mb-3">Tambah Mata Kuliah</a>
+    {{/if}}
 </div>
 
 <table class="table table-bordered">
@@ -10,7 +12,9 @@
             <th>Kode Mata Kuliah</th>
             <th>Nama Mata Kuliah</th>
             <th>SKS</th>
+            {{#if isAdmin}}
             <th colspan="2">Actions</th>
+            {{/if}}
         </tr>
     </thead>
     <tbody>
@@ -28,6 +32,7 @@
             <td>{{kode}}</td>
             <td>{{nama}}</td>
             <td>{{sks}}</td>
+            {{#if ../isAdmin}}
             <td>
                 <a href="/mata-kuliah/edit/{{id}}" class="btn btn-warning w-100">Edit</a>
             </td>
@@ -37,6 +42,7 @@
                     <button type="submit" class="btn btn-danger w-100">Delete</button>
                 </form>
             </td>
+            {{/if}}
         </tr>
         {{/each}}
     </tbody>

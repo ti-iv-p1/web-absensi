@@ -2,17 +2,19 @@ const router = require('express').Router();
 
 const MataKuliahController = require('../controllers/MataKuliahController');
 
-router.get('/list', MataKuliahController.listMataKuliah);
+const { authorize } = require('../middlewares/authMiddleware');
 
-router.get('/create', MataKuliahController.showCreateForm);
+router.get('/list', authorize('admin','dosen'), MataKuliahController.listMataKuliah);
 
-router.get('/edit/:id', MataKuliahController.showEditForm);
+router.get('/create', authorize('admin'), MataKuliahController.showCreateForm);
 
-router.post('/create', MataKuliahController.createMataKuliah);
+router.get('/edit/:id', authorize('admin'), MataKuliahController.showEditForm);
 
-router.post('/edit/:id', MataKuliahController.editMataKuliah);
+router.post('/create', authorize('admin'), MataKuliahController.createMataKuliah);
 
-router.post('/delete/:id', MataKuliahController.deleteMataKuliah);
+router.post('/edit/:id', authorize('admin'), MataKuliahController.editMataKuliah);
+
+router.post('/delete/:id', authorize('admin'), MataKuliahController.deleteMataKuliah);
 
 
 module.exports = router;

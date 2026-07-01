@@ -1,5 +1,7 @@
 <h1>Daftar Kelas</h1>
+{{#if isAdmin}}
 <a href="/kelas/create" class="btn btn-primary mb-3">Tambah Kelas</a>
+{{/if}}
 
 <table class="table table-bordered">
   <thead>
@@ -11,7 +13,9 @@
       <th>Semester</th>
       <th>Tahun Akademik</th>
       <th>Jumlah Peserta</th>
+      {{#if isAdmin}}
       <th colspan="2">Actions</th>
+      {{/if}}
     </tr>
   </thead>
   <tbody>
@@ -33,6 +37,7 @@
       <td>{{semester}}</td>
       <td>{{tahun_akademik}}</td>
       <td>{{jumlah_peserta}} peserta</td>
+      {{#if isAdmin}}
       <td>
         <a href="/kelas/edit/{{id}}" class="btn btn-warning w-100">Edit</a>
       </td>
@@ -42,6 +47,7 @@
             onclick="return confirm('Apakah Anda yakin ingin menghapus kelas ini?');">Hapus</button>
         </form>
       </td>
+      {{/if}}
     </tr>
     {{/each}}
   </tbody>

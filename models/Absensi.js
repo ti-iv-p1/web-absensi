@@ -26,6 +26,31 @@ function ambilSemuaSesi() {
     `).all();
 }
 
+function ambilSemuaSesiByDosenId(dosen_id) {
+    return db.prepare(`
+        SELECT 
+            sesi_absensi.id,
+            sesi_absensi.pertemuan_ke,
+            sesi_absensi.topik,
+            sesi_absensi.tanggal,
+            sesi_absensi.jam_mulai,
+            sesi_absensi.jam_selesai,
+            sesi_absensi.kelas_id,
+            kelas.nama_kelas,
+            kelas.semester,
+            kelas.tahun_akademik,
+            mata_kuliah.nama as nama_mata_kuliah,
+            pengguna.nama as nama_dosen
+        FROM sesi_absensi
+        INNER JOIN kelas ON sesi_absensi.kelas_id = kelas.id
+        INNER JOIN mata_kuliah ON kelas.mata_kuliah_id = mata_kuliah.id
+        INNER JOIN dosen ON kelas.dosen_id = dosen.id
+        INNER JOIN pengguna ON dosen.pengguna_id = pengguna.id
+        WHERE pengguna.id = ?
+        ORDER BY sesi_absensi.tanggal DESC, sesi_absensi.jam_mulai DESC
+    `).all(dosen_id);
+}
+
 function ambilSesiById(id) {
     return db.prepare(`
         SELECT
@@ -169,6 +194,7 @@ function ambilRekapAbsensi(kelas_id) {
 module.exports = {
     // Sesi Absensi
     ambilSemuaSesi,
+    ambilSemuaSesiByDosenId,
     ambilSesiById,
     buatSesi,
     updateSesi,

@@ -62,9 +62,11 @@ function handleLogin(req, res) {
       nama: user.nama,
       email: user.email,
     }; */
-  req.session.id = user.id;
+
+  req.session.user_id = user.id;
   req.session.nama = user.nama;
   req.session.email = user.email;
+  req.session.peran = user.peran;
 
   res.redirect("/");
 }
