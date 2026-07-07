@@ -15,4 +15,4 @@ diagram.dbml
 .vscode
 .idea
 *.log
-absensi-ibbi.db
+# absensi-ibbi.db
