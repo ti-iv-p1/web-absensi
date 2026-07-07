@@ -1,0 +1,18 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.env
+.env.example
+.env copy.example
+README.md
+AGENTS.md
+.pi
+.devdbrc
+diagram.png
+diagram.dbdiagram
+diagram.dbml
+.vscode
+.idea
+*.log
+absensi-ibbi.db
