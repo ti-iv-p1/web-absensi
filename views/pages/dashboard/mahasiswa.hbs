@@ -1,0 +1,158 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Dashboard Mahasiswa</h3>
+        <p class="text-muted mb-0">Selamat datang, <strong>{{session.nama}}</strong> ({{stats.nim}}) — {{#eq stats.programStudi "ti"}}Teknik Informatika{{/eq}}{{#eq stats.programStudi "si"}}Sistem Informasi{{/eq}}{{#eq stats.programStudi "it"}}Information Technology{{/eq}} Angkatan {{stats.angkatan}}</p>
+    </div>
+    <a href="/reports/mahasiswa" class="btn btn-outline-primary">
+        Lihat Laporan
+    </a>
+</div>
+
+{{!-- Statistik Kehadiran Cards --}}
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #198754 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-success mb-1">{{stats.totalHadir}}</h3>
+                <small class="text-muted">Hadir</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #0dcaf0 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-info mb-1">{{stats.totalIzin}}</h3>
+                <small class="text-muted">Izin</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #fd7e14 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-warning mb-1" style="color: #fd7e14;">{{stats.totalSakit}}</h3>
+                <small class="text-muted">Sakit</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #dc3545 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-danger mb-1">{{stats.totalAlpha}}</h3>
+                <small class="text-muted">Alpha</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Ringkasan Kehadiran per Kelas --}}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="fw-bold mb-0">📊 Ringkasan Kehadiran per Mata Kuliah</h5>
+    </div>
+    <div class="card-body p-0">
+        {{#if stats.kelasList.length}}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kode MK</th>
+                        <th>Mata Kuliah</th>
+                        <th>Kelas</th>
+                        <th>Semester</th>
+                        <th class="text-center">Hadir</th>
+                        <th class="text-center">Izin</th>
+                        <th class="text-center">Sakit</th>
+                        <th class="text-center">Alpha</th>
+                        <th class="text-center">Total</th>
+                        <th>Kehadiran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each stats.kelasList}}
+                    <tr>
+                        <td><span class="badge bg-secondary">{{kode_mata_kuliah}}</span></td>
+                        <td>{{nama_mata_kuliah}}</td>
+                        <td>{{nama_kelas}}</td>
+                        <td>{{semester}} {{tahun_akademik}}</td>
+                        <td class="text-center text-success fw-bold">{{total_hadir}}</td>
+                        <td class="text-center text-info fw-bold">{{total_izin}}</td>
+                        <td class="text-center text-warning fw-bold">{{total_sakit}}</td>
+                        <td class="text-center text-danger fw-bold">{{total_alpha}}</td>
+                        <td class="text-center fw-bold">{{total_sesi}}</td>
+                        <td>
+                            {{#if (gt total_sesi 0)}}
+                            <div class="progress" style="height: 20px;" title="{{persentase total_hadir total_sesi}}%">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{math (persentase total_hadir total_sesi) '+' 0}}%" aria-valuenow="{{total_hadir}}" aria-valuemin="0" aria-valuemax="{{total_sesi}}">
+                                    {{persentase total_hadir total_sesi}}%
+                                </div>
+                            </div>
+                            {{else}}
+                            <small class="text-muted">Belum ada</small>
+                            {{/if}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-5 text-muted">
+            <p class="mb-0">Belum terdaftar di kelas manapun</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+{{!-- 5 Sesi Absensi Terbaru --}}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="fw-bold mb-0">🕐 5 Riwayat Absensi Terbaru</h5>
+    </div>
+    <div class="card-body p-0">
+        {{#if stats.sesiTerbaru.length}}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Mata Kuliah</th>
+                        <th>Kelas</th>
+                        <th>Pertemuan</th>
+                        <th>Topik</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each stats.sesiTerbaru}}
+                    <tr>
+                        <td>{{tanggal}}</td>
+                        <td>{{nama_mata_kuliah}}</td>
+                        <td>{{nama_kelas}}</td>
+                        <td>Pertemuan {{pertemuan_ke}}</td>
+                        <td>{{topik}}</td>
+                        <td class="text-center">
+                            {{#eq status_absensi "hadir"}}
+                            <span class="badge bg-success">Hadir</span>
+                            {{/eq}}
+                            {{#eq status_absensi "izin"}}
+                            <span class="badge bg-info">Izin</span>
+                            {{/eq}}
+                            {{#eq status_absensi "sakit"}}
+                            <span class="badge bg-warning text-dark">Sakit</span>
+                            {{/eq}}
+                            {{#eq status_absensi "alpha"}}
+                            <span class="badge bg-danger">Alpha</span>
+                            {{/eq}}
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-4 text-muted">
+            <p class="mb-0">Belum ada riwayat absensi</p>
+        </div>
+        {{/if}}
+    </div>
+</div>

@@ -1,0 +1,289 @@
+{{!-- Tab Navigation --}}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Laporan Admin</h3>
+        <p class="text-muted mb-0">Rekap Absensi dan Statistik Global</p>
+    </div>
+</div>
+
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {{#unless mode}}active fw-bold{{/unless}}" href="/reports/admin">Rekap Absensi</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{#if mode}}active fw-bold{{/if}}" href="/reports/admin/global">Rekap Global</a>
+    </li>
+</ul>
+
+{{#if mode}}
+    {{!-- ==================== REKAP GLOBAL ==================== --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">📊 Statistik Umum Sistem</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 mb-4">
+                <div class="col-md-2 col-6">
+                    <div class="card bg-primary bg-opacity-10 text-center py-3 border-0">
+                        <h4 class="fw-bold text-primary mb-1">{{rekapGlobal.totalMahasiswa}}</h4>
+                        <small class="text-muted">Mahasiswa</small>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-success bg-opacity-10 text-center py-3 border-0">
+                        <h4 class="fw-bold text-success mb-1">{{rekapGlobal.totalDosen}}</h4>
+                        <small class="text-muted">Dosen</small>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-warning bg-opacity-10 text-center py-3 border-0">
+                        <h4 class="fw-bold text-warning mb-1" style="color:#fd7e14;">{{rekapGlobal.totalKelas}}</h4>
+                        <small class="text-muted">Kelas</small>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-info bg-opacity-10 text-center py-3 border-0">
+                        <h4 class="fw-bold text-info mb-1">{{rekapGlobal.totalSesi}}</h4>
+                        <small class="text-muted">Sesi</small>
+                    </div>
+                </div>
+                <div class="col-md-2 col-6">
+                    <div class="card bg-danger bg-opacity-10 text-center py-3 border-0">
+                        <h4 class="fw-bold text-danger mb-1">{{rekapGlobal.totalAbsensi}}</h4>
+                        <small class="text-muted">Entri Absensi</small>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Distribusi Status Absensi --}}
+            <h6 class="fw-bold mb-3">Distribusi Status Absensi</h6>
+            <div class="row g-2 mb-4">
+                {{#each rekapGlobal.distribusiStatus}}
+                <div class="col-md-3 col-6">
+                    <div class="card border-0 text-center py-2
+                        {{#eq status 'hadir'}}bg-success bg-opacity-10{{/eq}}
+                        {{#eq status 'izin'}}bg-info bg-opacity-10{{/eq}}
+                        {{#eq status 'sakit'}}bg-warning bg-opacity-10{{/eq}}
+                        {{#eq status 'alpha'}}bg-danger bg-opacity-10{{/eq}}">
+                        <h5 class="fw-bold mb-0
+                            {{#eq status 'hadir'}}text-success{{/eq}}
+                            {{#eq status 'izin'}}text-info{{/eq}}
+                            {{#eq status 'sakit'}}text-warning{{/eq}}
+                            {{#eq status 'alpha'}}text-danger{{/eq}}">{{jumlah}}</h5>
+                        <small class="text-muted text-capitalize">{{status}}</small>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+
+            {{!-- Rata-rata Kehadiran per Kelas --}}
+            <h6 class="fw-bold mb-3">Rata-rata Kehadiran per Kelas</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-sm table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Kelas</th>
+                            <th>Mata Kuliah</th>
+                            <th class="text-center">Mahasiswa</th>
+                            <th class="text-center">Sesi</th>
+                            <th class="text-center">Hadir</th>
+                            <th>% Hadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each rekapGlobal.rataKelas}}
+                        <tr>
+                            <td>{{nama_kelas}}</td>
+                            <td>{{nama_mata_kuliah}}</td>
+                            <td class="text-center">{{jumlah_mahasiswa}}</td>
+                            <td class="text-center">{{jumlah_sesi}}</td>
+                            <td class="text-center">{{total_hadir}}</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar
+                                        {{#if (gt persen_hadir 75)}}bg-success{{/if}}
+                                        {{#if (and (gt persen_hadir 50) (lte persen_hadir 75))}}bg-warning{{/if}}
+                                        {{#if (lte persen_hadir 50)}}bg-danger{{/if}}"
+                                        role="progressbar" style="width: {{persen_hadir}}%"
+                                        aria-valuenow="{{persen_hadir}}" aria-valuemin="0" aria-valuemax="100">
+                                        {{persen_hadir}}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            {{!-- Mahasiswa dengan Alpha Tertinggi --}}
+            <h6 class="fw-bold mb-3">🔴 Top 10 Mahasiswa Alpha Tertinggi</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th>Prodi</th>
+                            <th class="text-center">Alpha</th>
+                            <th class="text-center">Total Sesi</th>
+                            <th>% Alpha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each rekapGlobal.alphaTertinggi}}
+                        <tr>
+                            <td>{{inc @index}}</td>
+                            <td>{{nim}}</td>
+                            <td>{{nama}}</td>
+                            <td>{{#eq program_studi "ti"}}TI{{/eq}}{{#eq program_studi "si"}}SI{{/eq}}{{#eq program_studi "it"}}IT{{/eq}}</td>
+                            <td class="text-center text-danger fw-bold">{{total_alpha}}</td>
+                            <td class="text-center">{{total_sesi}}</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-danger" role="progressbar"
+                                        style="width: {{persen_alpha}}%"
+                                        aria-valuenow="{{persen_alpha}}" aria-valuemin="0" aria-valuemax="100">
+                                        {{persen_alpha}}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{{else}}
+    {{!-- ==================== REKAP ABSENSI ==================== --}}
+
+    {{!-- Filter Form --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0"><i class="bi bi-funnel"></i> Filter Rekap Absensi</h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="/reports/admin" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Kelas</label>
+                    <select name="kelas_id" class="form-select form-select-sm">
+                        <option value="">-- Semua Kelas --</option>
+                        {{#each semuaKelas}}
+                        <option value="{{id}}" {{isSelected ../filter.kelas_id id}}>
+                            {{nama_mata_kuliah}} - {{nama_kelas}} ({{semester}} {{tahun_akademik}})
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Program Studi</label>
+                    <select name="program_studi" class="form-select form-select-sm">
+                        <option value="">-- Semua --</option>
+                        <option value="ti" {{isSelected filter.program_studi "ti"}}>Teknik Informatika (TI)</option>
+                        <option value="si" {{isSelected filter.program_studi "si"}}>Sistem Informasi (SI)</option>
+                        <option value="it" {{isSelected filter.program_studi "it"}}>Information Technology (IT)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Angkatan</label>
+                    <select name="angkatan" class="form-select form-select-sm">
+                        <option value="">-- Semua --</option>
+                        {{#each semuaAngkatan}}
+                        <option value="{{angkatan}}" {{isSelected ../filter.angkatan angkatan}}>{{angkatan}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Tanggal Mulai</label>
+                    <input type="date" name="tanggal_mulai" class="form-control form-control-sm" value="{{filter.tanggal_mulai}}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Tanggal Selesai</label>
+                    <input type="date" name="tanggal_selesai" class="form-control form-control-sm" value="{{filter.tanggal_selesai}}">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-sm">Terapkan Filter</button>
+                    <a href="/reports/admin" class="btn btn-outline-secondary btn-sm">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{!-- Tabel Rekap --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <h5 class="fw-bold mb-0">📋 Data Rekap Absensi</h5>
+            <small class="text-muted">Total: {{rekap.length}} data</small>
+        </div>
+        <div class="card-body p-0">
+            {{#if rekap.length}}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="rekapTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>NIM</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Prodi</th>
+                            <th>Angkatan</th>
+                            <th>Mata Kuliah</th>
+                            <th>Kelas</th>
+                            <th class="text-center text-success">H</th>
+                            <th class="text-center text-info">I</th>
+                            <th class="text-center text-warning">S</th>
+                            <th class="text-center text-danger">A</th>
+                            <th class="text-center">Total</th>
+                            <th>% Hadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each rekap}}
+                        <tr>
+                            <td><span class="badge bg-secondary">{{nim}}</span></td>
+                            <td>{{nama_mahasiswa}}</td>
+                            <td>
+                                {{#eq program_studi "ti"}}TI{{/eq}}
+                                {{#eq program_studi "si"}}SI{{/eq}}
+                                {{#eq program_studi "it"}}IT{{/eq}}
+                            </td>
+                            <td>{{angkatan}}</td>
+                            <td>{{nama_mata_kuliah}}</td>
+                            <td>{{nama_kelas}}</td>
+                            <td class="text-center text-success fw-bold">{{total_hadir}}</td>
+                            <td class="text-center text-info fw-bold">{{total_izin}}</td>
+                            <td class="text-center text-warning fw-bold">{{total_sakit}}</td>
+                            <td class="text-center text-danger fw-bold">{{total_alpha}}</td>
+                            <td class="text-center fw-bold">{{total_sesi}}</td>
+                            <td>
+                                {{#if (gt total_sesi 0)}}
+                                <div class="progress" style="height: 18px;">
+                                    <div class="progress-bar
+                                        {{#if (gt (persentase total_hadir total_sesi) 75)}}bg-success{{/if}}
+                                        {{#if (and (gt (persentase total_hadir total_sesi) 50) (lte (persentase total_hadir total_sesi) 75))}}bg-warning{{/if}}
+                                        {{#if (lte (persentase total_hadir total_sesi) 50)}}bg-danger{{/if}}"
+                                        role="progressbar"
+                                        style="width: {{persentase total_hadir total_sesi}}%"
+                                        aria-valuenow="{{total_hadir}}" aria-valuemin="0" aria-valuemax="{{total_sesi}}">
+                                        {{persentase total_hadir total_sesi}}%
+                                    </div>
+                                </div>
+                                {{else}}
+                                <small class="text-muted">-</small>
+                                {{/if}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <div class="text-center py-5 text-muted">
+                <h5>Tidak ada data</h5>
+                <p class="mb-0">Silakan atur filter untuk menampilkan data rekap absensi.</p>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+{{/if}}

@@ -1,0 +1,171 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Laporan Dosen</h3>
+        <p class="text-muted mb-0">Detail Absensi per Kelas</p>
+    </div>
+</div>
+
+{{!-- Pilih Kelas --}}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="fw-bold mb-0">📋 Pilih Kelas</h5>
+    </div>
+    <div class="card-body">
+        <form method="GET" action="/reports/dosen" class="row g-3">
+            <div class="col-md-6">
+                <select name="kelas_id" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Pilih Kelas --</option>
+                    {{#each daftarKelas}}
+                    <option value="{{id}}" {{isSelected ../filter.kelas_id id}}>
+                        {{kode_mata_kuliah}} - {{nama_mata_kuliah}} - {{nama_kelas}} ({{jumlah_peserta}} mhs)
+                    </option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Tampilkan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{#if laporanKelas}}
+    {{!-- Info Kelas --}}
+    <div class="card border-0 shadow-sm mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <small class="text-muted d-block">Mata Kuliah</small>
+                    <strong>{{laporanKelas.kelas.nama_mata_kuliah}} ({{laporanKelas.kelas.kode_mata_kuliah}})</strong>
+                </div>
+                <div class="col-md-2">
+                    <small class="text-muted d-block">Kelas</small>
+                    <strong>{{laporanKelas.kelas.nama_kelas}}</strong>
+                </div>
+                <div class="col-md-2">
+                    <small class="text-muted d-block">Semester</small>
+                    <strong>{{laporanKelas.kelas.semester}} {{laporanKelas.kelas.tahun_akademik}}</strong>
+                </div>
+                <div class="col-md-2">
+                    <small class="text-muted d-block">Jumlah Mahasiswa</small>
+                    <strong>{{laporanKelas.jumlahMahasiswa}} orang</strong>
+                </div>
+                <div class="col-md-3">
+                    <small class="text-muted d-block">Jumlah Sesi Pertemuan</small>
+                    <strong>{{laporanKelas.jumlahSesi}} sesi</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Rekap Kehadiran per Mahasiswa --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">📊 Rekap Kehadiran Mahasiswa</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>NIM</th>
+                            <th>Nama</th>
+                            <th class="text-center text-success">Hadir</th>
+                            <th class="text-center text-info">Izin</th>
+                            <th class="text-center text-warning">Sakit</th>
+                            <th class="text-center text-danger">Alpha</th>
+                            <th class="text-center">Total</th>
+                            <th>% Hadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each laporanKelas.rekapMahasiswa}}
+                        <tr>
+                            <td>{{inc @index}}</td>
+                            <td><span class="badge bg-secondary">{{nim}}</span></td>
+                            <td>{{nama_mahasiswa}}</td>
+                            <td class="text-center text-success fw-bold">{{total_hadir}}</td>
+                            <td class="text-center text-info fw-bold">{{total_izin}}</td>
+                            <td class="text-center text-warning fw-bold">{{total_sakit}}</td>
+                            <td class="text-center text-danger fw-bold">{{total_alpha}}</td>
+                            <td class="text-center fw-bold">{{total_sesi}}</td>
+                            <td>
+                                {{#if (gt total_sesi 0)}}
+                                <div class="progress" style="height: 18px;">
+                                    <div class="progress-bar
+                                        {{#if (gt (persentase total_hadir total_sesi) 75)}}bg-success{{/if}}
+                                        {{#if (and (gt (persentase total_hadir total_sesi) 50) (lte (persentase total_hadir total_sesi) 75))}}bg-warning{{/if}}
+                                        {{#if (lte (persentase total_hadir total_sesi) 50)}}bg-danger{{/if}}"
+                                        role="progressbar"
+                                        style="width: {{persentase total_hadir total_sesi}}%"
+                                        aria-valuenow="{{total_hadir}}" aria-valuemin="0" aria-valuemax="{{total_sesi}}">
+                                        {{persentase total_hadir total_sesi}}%
+                                    </div>
+                                </div>
+                                {{else}}
+                                <small class="text-muted">-</small>
+                                {{/if}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Matrix Absensi per Sesi --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-bold mb-0">📋 Detail Absensi per Pertemuan</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="min-width: 180px;">Mahasiswa</th>
+                            {{#each laporanKelas.sesiList}}
+                            <th class="text-center" style="min-width: 50px;">
+                                <small>P{{pertemuan_ke}}<br>
+                                <span class="text-muted fw-normal">{{tanggal}}</span></small>
+                            </th>
+                            {{/each}}
+                            <th class="text-center">% Hadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each laporanKelas.rekapMahasiswa}}
+                        <tr>
+                            <td><small>{{nim}} - {{nama_mahasiswa}}</small></td>
+                            {{#each sesiStatuses}}
+                            <td class="text-center">
+                                {{#eq status "hadir"}}
+                                <span class="text-success fw-bold">✓</span>
+                                {{/eq}}
+                                {{#eq status "izin"}}
+                                <span class="text-info fw-bold">I</span>
+                                {{/eq}}
+                                {{#eq status "sakit"}}
+                                <span class="text-warning fw-bold">S</span>
+                                {{/eq}}
+                                {{#eq status "alpha"}}
+                                <span class="text-danger fw-bold">✗</span>
+                                {{/eq}}
+                                {{#unless status}}
+                                <span class="text-muted">-</span>
+                                {{/unless}}
+                            </td>
+                            {{/each}}
+                            <td class="text-center fw-bold">
+                                {{persentase total_hadir total_sesi}}%
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{{/if}}

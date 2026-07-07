@@ -1,0 +1,136 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Dashboard Dosen</h3>
+        <p class="text-muted mb-0">Selamat datang, <strong>{{session.nama}}</strong> — Ringkasan Kelas dan Absensi</p>
+    </div>
+    <a href="/reports/dosen" class="btn btn-outline-primary">
+        Lihat Laporan
+    </a>
+</div>
+
+{{!-- Statistik Cards --}}
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #0d6efd !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-primary mb-1">{{stats.totalKelas}}</h3>
+                <small class="text-muted">Kelas Diajar</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #198754 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-success mb-1">{{stats.totalMahasiswa}}</h3>
+                <small class="text-muted">Total Mahasiswa</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #fd7e14 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-warning mb-1" style="color: #fd7e14;">{{stats.totalSesi}}</h3>
+                <small class="text-muted">Sesi Absensi</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
+        <div class="card border-0 shadow-sm h-100 text-center py-3" style="border-left: 4px solid #dc3545 !important;">
+            <div class="card-body">
+                <h3 class="fw-bold text-danger mb-1">{{stats.totalAbsensi}}</h3>
+                <small class="text-muted">Entri Absensi</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Daftar Kelas --}}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="fw-bold mb-0">📚 Daftar Kelas yang Diajar</h5>
+        <a href="/kelas/list" class="btn btn-sm btn-outline-primary">Kelola Kelas</a>
+    </div>
+    <div class="card-body p-0">
+        {{#if stats.kelasList.length}}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Kode MK</th>
+                        <th>Mata Kuliah</th>
+                        <th>Kelas</th>
+                        <th>Semester</th>
+                        <th class="text-center">Peserta</th>
+                        <th class="text-center">Sesi</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each stats.kelasList}}
+                    <tr>
+                        <td><span class="badge bg-secondary">{{kode_mata_kuliah}}</span></td>
+                        <td>{{nama_mata_kuliah}}</td>
+                        <td>{{nama_kelas}}</td>
+                        <td>{{semester}} {{tahun_akademik}}</td>
+                        <td class="text-center">{{jumlah_peserta}}</td>
+                        <td class="text-center">{{jumlah_sesi}}</td>
+                        <td class="text-center">
+                            <a href="/absensi/list?kelas_id={{id}}" class="btn btn-sm btn-outline-info">Absensi</a>
+                            <a href="/absensi/rekap?kelas_id={{id}}" class="btn btn-sm btn-outline-secondary">Rekap</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-5 text-muted">
+            <p class="mb-0">Belum ada kelas yang diampu</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+{{!-- 5 Sesi Absensi Terbaru --}}
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h5 class="fw-bold mb-0">🕐 5 Sesi Absensi Terbaru</h5>
+        <a href="/absensi/list" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+    </div>
+    <div class="card-body p-0">
+        {{#if stats.sesiTerbaru.length}}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Mata Kuliah</th>
+                        <th>Kelas</th>
+                        <th>Pertemuan</th>
+                        <th>Jam</th>
+                        <th class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each stats.sesiTerbaru}}
+                    <tr>
+                        <td>{{tanggal}}</td>
+                        <td>{{nama_mata_kuliah}}</td>
+                        <td>{{nama_kelas}}</td>
+                        <td>Pertemuan {{pertemuan_ke}}</td>
+                        <td>{{jam_mulai}} - {{jam_selesai}}</td>
+                        <td class="text-center">
+                            <a href="/absensi/absen/{{id}}" class="btn btn-sm btn-outline-success">Absen</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="text-center py-4 text-muted">
+            <p class="mb-0">Belum ada sesi absensi</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
