@@ -15,6 +15,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const kelasRoutes = require('./routes/kelasRoutes');
 const authRoutes = require('./routes/authRoutes');
 const absensiRoutes = require('./routes/absensiRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const reportRoutes = require('./routes/reportRoutes');
 
 const { isAuthenticated, authorize } = require('./middlewares/authMiddleware');
 
@@ -98,6 +100,26 @@ app.engine('hbs', engine({
     array: (...args) => args.slice(0, -1), // last arg is Handlebars options object
     // Lookup helper: {{lookup obj key}}
     lookup: (obj, key) => obj ? obj[key] : undefined,
+    // Less than or equal: {{#lte a b}}...{{/lte}}
+    lte: (a, b) => {
+      const numA = parseFloat(a) || 0;
+      const numB = parseFloat(b) || 0;
+      return numA <= numB;
+    },
+    // Logical AND: {{and (cond1) (cond2)}}
+    and: (a, b) => a && b,
+    // String concat: {{concat a b}}
+    concat: (a, b) => String(a) + String(b),
+    // Logical OR: {{or a b}}
+    or: (...args) => {
+      const options = args[args.length - 1];
+      // If called as block helper with options object
+      if (options && typeof options.fn === 'function') {
+        return args.slice(0, -1).some(Boolean) ? options.fn(this) : options.inverse(this);
+      }
+      // Called as inline helper
+      return args.some(Boolean);
+    },
     // Percentage helper: {{persentase nilai total}}
     persentase: (nilai, total) => {
       const n = parseFloat(nilai) || 0;
@@ -131,9 +153,9 @@ app.use('/bootstrap',
   express.static(path.join(__dirname, 'node_modules/bootstrap/dist'))
 );
 
-// Buat route ke root /
+// Route root — redirect ke dashboard sesuai role
 app.get('/', isAuthenticated, (req, res) => {
-  res.render('pages/index');
+  res.redirect('/dashboard');
 });
 
 app.use("/mata-kuliah", isAuthenticated, matakuliahRoutes);
@@ -141,6 +163,8 @@ app.use("/mahasiswa", isAuthenticated, authorize('admin'), mahasiswaRoutes);
 app.use("/dosen", isAuthenticated, authorize('admin'), dosenRoutes);
 app.use("/admin", isAuthenticated, authorize('admin'), adminRoutes);
 app.use("/kelas", isAuthenticated, kelasRoutes);
+app.use("/dashboard", isAuthenticated, dashboardRoutes);
+app.use("/reports", isAuthenticated, reportRoutes);
 app.use("/auth", authRoutes);
 app.use("/absensi", isAuthenticated, authorize('admin', 'dosen'), absensiRoutes);
 

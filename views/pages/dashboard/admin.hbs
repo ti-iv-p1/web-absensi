@@ -1,0 +1,256 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">Dashboard Admin</h3>
+        <p class="text-muted mb-0">Selamat datang, <strong>{{session.nama}}</strong> — Ringkasan Sistem Absensi IBBI</p>
+    </div>
+    <a href="/reports/admin" class="btn btn-outline-primary">
+        <i class="bi bi-file-earmark-bar-graph"></i> Lihat Laporan
+    </a>
+</div>
+
+{{!-- Statistik Cards --}}
+<div class="row g-3 mb-4">
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0d6efd !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-primary mb-1">{{stats.totalMahasiswa}}</h5>
+                <small class="text-muted">Mahasiswa</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #198754 !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-success mb-1">{{stats.totalDosen}}</h5>
+                <small class="text-muted">Dosen</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #6f42c1 !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-purple mb-1" style="color: #6f42c1;">{{stats.totalAdmin}}</h5>
+                <small class="text-muted">Admin</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #fd7e14 !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-warning mb-1" style="color: #fd7e14;">{{stats.totalMataKuliah}}</h5>
+                <small class="text-muted">Mata Kuliah</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #dc3545 !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-danger mb-1">{{stats.totalKelas}}</h5>
+                <small class="text-muted">Kelas</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-6">
+        <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid #0dcaf0 !important;">
+            <div class="card-body text-center">
+                <h5 class="card-title text-info mb-1">{{stats.totalSesi}}</h5>
+                <small class="text-muted">Sesi Absensi</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Baris 2: Grafik sederhana + Tabel --}}
+<div class="row g-3 mb-4">
+    {{!-- Mahasiswa per Program Studi --}}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom-0 pt-3 px-3">
+                <h6 class="fw-bold mb-0">Mahasiswa per Program Studi</h6>
+            </div>
+            <div class="card-body px-3">
+                {{#if stats.mahasiswaPerProdi.length}}
+                <table class="table table-sm table-borderless mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Program Studi</th>
+                            <th class="text-center">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each stats.mahasiswaPerProdi}}
+                        <tr>
+                            <td>
+                                {{#eq program_studi "ti"}}Teknik Informatika (TI){{/eq}}
+                                {{#eq program_studi "si"}}Sistem Informasi (SI){{/eq}}
+                                {{#eq program_studi "it"}}Information Technology (IT){{/eq}}
+                            </td>
+                            <td class="text-center fw-bold">{{jumlah}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{else}}
+                <p class="text-muted mb-0">Belum ada data mahasiswa</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{!-- Dosen per Departemen --}}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom-0 pt-3 px-3">
+                <h6 class="fw-bold mb-0">Dosen per Departemen</h6>
+            </div>
+            <div class="card-body px-3">
+                {{#if stats.dosenPerDepartemen.length}}
+                <table class="table table-sm table-borderless mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Departemen</th>
+                            <th class="text-center">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each stats.dosenPerDepartemen}}
+                        <tr>
+                            <td>
+                                {{#eq departemen "fish"}}Fakultas Ilmu Sosial dan Humaniora (FISH){{/eq}}
+                                {{#eq departemen "fast"}}Fakultas Sains dan Teknologi (FaST){{/eq}}
+                            </td>
+                            <td class="text-center fw-bold">{{jumlah}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{else}}
+                <p class="text-muted mb-0">Belum ada data dosen</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{!-- Kelas per Tahun Akademik --}}
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white border-bottom-0 pt-3 px-3">
+                <h6 class="fw-bold mb-0">Kelas per Tahun Akademik</h6>
+            </div>
+            <div class="card-body px-3">
+                {{#if stats.kelasPerTahun.length}}
+                <table class="table table-sm table-borderless mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Tahun Akademik</th>
+                            <th class="text-center">Semester</th>
+                            <th class="text-center">Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each stats.kelasPerTahun}}
+                        <tr>
+                            <td>{{tahun_akademik}}</td>
+                            <td class="text-center">
+                                {{#eq semester "ganjil"}}Ganjil{{/eq}}
+                                {{#eq semester "genap"}}Genap{{/eq}}
+                            </td>
+                            <td class="text-center fw-bold">{{jumlah}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+                {{else}}
+                <p class="text-muted mb-0">Belum ada data kelas</p>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Baris 3: Tabel data terbaru --}}
+<div class="row g-3">
+    {{!-- 5 Sesi Absensi Terbaru --}}
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h6 class="fw-bold mb-0">5 Sesi Absensi Terbaru</h6>
+                <a href="/absensi/list" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+                {{#if stats.sesiTerbaru.length}}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mata Kuliah</th>
+                                <th>Kelas</th>
+                                <th>Pertemuan</th>
+                                <th>Tanggal</th>
+                                <th>Dosen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each stats.sesiTerbaru}}
+                            <tr>
+                                <td>{{nama_mata_kuliah}}</td>
+                                <td>{{nama_kelas}}</td>
+                                <td>Pertemuan {{pertemuan_ke}}</td>
+                                <td>{{tanggal}}</td>
+                                <td>{{nama_dosen}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                {{else}}
+                <div class="text-center py-4 text-muted">
+                    <p class="mb-0">Belum ada sesi absensi</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{!-- 5 Kelas Terbaru --}}
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h6 class="fw-bold mb-0">5 Kelas Terbaru</h6>
+                <a href="/kelas/list" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+            </div>
+            <div class="card-body p-0">
+                {{#if stats.kelasTerbaru.length}}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Kelas</th>
+                                <th>Mata Kuliah</th>
+                                <th>Dosen</th>
+                                <th class="text-center">Peserta</th>
+                                <th>Semester</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each stats.kelasTerbaru}}
+                            <tr>
+                                <td>{{nama_kelas}}</td>
+                                <td>{{nama_mata_kuliah}}</td>
+                                <td>{{nama_dosen}}</td>
+                                <td class="text-center">{{jumlah_peserta}}</td>
+                                <td>{{semester}} {{tahun_akademik}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                {{else}}
+                <div class="text-center py-4 text-muted">
+                    <p class="mb-0">Belum ada kelas</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
